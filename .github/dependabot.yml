@@ -1,0 +1,11 @@
+# Dependabot version updates — fleet security standard.
+# Weekly, every ecosystem present in the repository, zero ignored updates.
+# The only package ecosystem present is github-actions (this workflow set).
+# (There is no CodeQL workflow here: the repo has no CodeQL-supported
+# language — Shell-only — so code scanning is not applicable.)
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

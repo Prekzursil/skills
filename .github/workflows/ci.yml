@@ -1,0 +1,37 @@
+# CI for the skills repository — shellcheck over every shell script.
+#
+# CodeQL/code scanning is NOT applicable to this repository: its entire
+# content is Markdown (66 files), 4 shell scripts, and 1 JSON file.
+# GitHub language detection reports only "Shell" (2,956 bytes), and the
+# code-scanning default-setup endpoint reports zero supported languages
+# (languages: []). An advanced CodeQL workflow requires a non-empty
+# language matrix, and default-setup cannot be configured without a
+# supported language — documented as a fleet limitation rather than
+# worked around with an always-failing or empty-matrix workflow.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run shellcheck on all shell scripts
+        run: |
+          set -euo pipefail
+          mapfile -t scripts < <(find . -name '*.sh' -not -path './.git/*' | sort)
+          printf 'Checking %d scripts:\n' "${#scripts[@]}"
+          printf '  %s\n' "${scripts[@]}"
+          shellcheck --severity=warning "${scripts[@]}"
